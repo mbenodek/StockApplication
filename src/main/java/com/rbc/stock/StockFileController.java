@@ -3,6 +3,8 @@ package com.rbc.stock;
 import com.rbc.stock.model.LoadFile;
 import com.rbc.stock.model.Stock;
 import com.rbc.stock.service.StockFileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -28,12 +30,23 @@ import java.util.List;
 //@RequestMapping("/")
 public class StockFileController {
 
+    private static Logger logger = LoggerFactory.getLogger(StockFileController.class);
+
     @Autowired
     private StockFileService fileService;
 
+    String result = Constants.SUCCESS;
+    String status = null;
+    String htmlPage = "success";
+
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("file")MultipartFile file) throws IOException {
-        return new ResponseEntity<>(fileService.addFile(file), HttpStatus.OK);
+    public String upload(@RequestParam("file")MultipartFile file) throws IOException {
+        logger.info("Entering the upload file function");
+
+
+        status= fileService.addFile(file);
+
+        return checkResult(status,htmlPage);
     }
 
     @GetMapping("/download/{id}")
@@ -66,23 +79,35 @@ public class StockFileController {
     }
 
     @PostMapping("/recordUpload")
-    public void uploadRecorded(@RequestParam("record") String record, HttpServletResponse response) throws IOException {
-        System.out.println("Inside the uploadRecord");
-        fileService.uploadSingleRecord(record);
+    public String uploadRecord(@RequestParam("record") String record, HttpServletResponse response) throws IOException {
+        logger.info("Entering the uploadRecord function");
+
+         status = fileService.uploadSingleRecord(record);
         response.setStatus(HttpServletResponse.SC_OK);
+        logger.info("Exiting the uploadRecord function");
+
+        return checkResult(status,htmlPage);
+
 
     }
 
-    @GetMapping("/searchRecords")
+    private String checkResult(String status,String htmlPage) {
+        logger.info("Entering the checkResult function");
+        if(status.equalsIgnoreCase(result)) {
+            return htmlPage;
+        }else{
+            return "error";
+        }
+    }
 
+    @GetMapping("/searchRecords")
     public String searchRecord(@RequestParam("stockName") String stockName, Model model) throws IOException {
+        logger.info("Entering the searchRecord function");
+
         System.out.println("Inside the stockName");
         List<Stock> stockList = fileService.searchRecords(stockName);
-
         model.addAttribute("stockList", stockList);
-
-
-      //  response.setStatus(HttpServletResponse.SC_OK);
+        logger.info("Exiting the searchRecord function");
 
         return "stock";
 

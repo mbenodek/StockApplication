@@ -1,5 +1,7 @@
 package com.rbc.stock.service;
 
+import com.rbc.stock.Constants;
+import com.rbc.stock.StockFileController;
 import com.rbc.stock.model.LoadFile;
 import com.rbc.stock.repository.UploadFileRepository;
 import com.mongodb.BasicDBObject;
@@ -8,6 +10,8 @@ import com.mongodb.client.gridfs.model.GridFSFile;
 import com.rbc.stock.model.Stock;
 import org.apache.commons.io.IOUtils;
 import org.bson.BsonValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -36,6 +40,8 @@ import org.apache.commons.csv.CSVRecord;
 @Service
 public class StockFileService {
 
+    private static Logger logger = LoggerFactory.getLogger(StockFileService.class);
+
     @Autowired
     private GridFsTemplate template;
 
@@ -46,16 +52,20 @@ public class StockFileService {
     @Autowired
     private UploadFileRepository uploadFileRepository;
 
-    public String addFile(MultipartFile upload) throws IOException {
+    String result = Constants.SUCCESS;
+
+    public String addFile(MultipartFile file) throws IOException {
+
+        logger.info("Entering the addFile function with file-->"+file.getName());
 
         //define additional metadata
         DBObject metadata = new BasicDBObject();
-        metadata.put("fileSize", upload.getSize());
+        metadata.put("fileSize", file.getSize());
 
         /******Start of logic to upload the contents into the database ******/
 
         BufferedReader fileReader = new BufferedReader(new
-                InputStreamReader(upload.getInputStream(), "UTF-8"));
+                InputStreamReader(file.getInputStream(), "UTF-8"));
 
         List<Stock> stockLists = new ArrayList<Stock>();
         CSVParser csvParser = new CSVParser(fileReader, CSVFormat.EXCEL.withHeader());
@@ -86,23 +96,23 @@ public class StockFileService {
             );
 
             stockLists.add(stock);
-            // System.out.println(csvRecord);
+
         }
 
         //End of Logic for reading the file
 
-
+        logger.info("The number of records added are =>"+stockLists.size());
         uploadFileRepository.saveAll(stockLists);
 
 
-        System.out.println("End");
-
-        //return as a string
-        return "Sucess";
+        logger.info("Exiting the addFile function");
 
 
 
-        /***************End of Logic ********/
+        return result;
+
+
+
 
     }
 
@@ -170,26 +180,30 @@ public class StockFileService {
 
     public List<Stock> searchRecords(String stockName){
 
-List<Stock> stockList = uploadFileRepository.findByStock(stockName);
-
-
-
+        logger.info("Entering the searchRecords function for stock =>"+stockName);
+        List<Stock> stockList = uploadFileRepository.findByStock(stockName);
+        logger.info("Entering the Exiting function for stock =>"+stockName);
         return stockList;
     }
 
 
     public String uploadSingleRecord(String record) throws IOException {
+        logger.info("Entering the uploadSingleRecord function");
+        try{
+            List<String> recordStr = Arrays.asList(record);
+            List<Stock> list = recordStr.stream()
+                    .map(Stock::new)
+                    .collect(Collectors.toList());
+            uploadFileRepository.saveAll(list);
+        }catch (Exception e){
 
-        System.out.println("Recorded ===>"+record);
-        List<String> recordStr = Arrays.asList(record);
+        logger.warn("An exception has occurred while inserting the record ");
+e. printStackTrace();
+        return Constants.FAILURE;
 
-        List<Stock> list = recordStr.stream()
-                .map(Stock::new)
-                .collect(Collectors.toList());
-   uploadFileRepository.saveAll(list);
-
-
-        return "Sucess";
+        }
+        logger.info("Exiting the uploadSingleRecord function");
+        return result;
 
 
     }
