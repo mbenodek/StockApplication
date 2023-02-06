@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Stockers !!!!!</title>
+        <script type="text/javascript" src="./js/js_jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="./js/jquery-ui"></script>
+        <script type="text/javascript" src="./js/select2.js"></script>
+        <script type="text/javascript" src="./js/jquery.dataTables.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="./css/select2.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/material.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/dataTables.material.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css">
+
+        <style>
+        #tabs-1{
+         background-color: #f9ffef;
+        }
+
+        .tap-row{
+         text-align: center;
+         font: 30pt "Helvetica","Lucida Grande", sans-serif;
+         color: #aaaaaa;
+         background-color: #f9ffe5;
+        }
+
+        .env-row{
+          background-color: #f9ffe5;
+        }
+
+        #message{
+
+        position: fixed;
+        top: 2px;
+        left: 2px;
+        padding: 1pt;
+        overflow: hidden;
+        text-align: left;
+        font: 10pt "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        color: #ffffff;
+        background-color: #4d9900;
+        display: none;
+        z-index: 10;
+        }
+
+        #env{
+         width :10%;
+
+        }
+
+     .tip{
+       font: 8pt tahoma;
+       color: blue;
+
+     }
+
+     .outermost{
+       margin: 2pt;
+       padding: 2pt;
+     }
+
+    </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+
+</head>
+<body>
+<noscript>
+    <h2 style="text-align: center;">Sorry! Browser does not support Javascript.</h2>
+</noscript>
+
+<div class="outermost">
+    <div class="top-row" style="color: #8ebf42"> Stock  Ticker <br></br></div>
+</div>
+
+</body>
+
+<div id="tabs">
+    <div id="tabs-1">
+        <table width="80%" border="2" align="center">
+
+            <form method="POST" enctype="multipart/form-data" action="upload">
+                <tr>
+
+                    <th width="5%"><label >Upload File(File)</label></th>
+                <tr><td>File to upload:</td><td><input type="file" name="file" id="fileUploadInput" class="file-input" required /></td></tr>
+                <td></td><td><input type="submit" value="Upload File" /></td>
+
+                </tr>
+
+            </form>
+
+    </div>
+    <form method="POST" id="uploadSingleRecordForm" action="recordUpload">
+        <tr>
+            <th width="5%">(OR)<br>Insert Single Record</th>
+            <td colspan="1"><textarea id="" name="record" rows="5" cols="100"> </textarea> </td>
+        <tr><td></td><td><input type="submit" value="Insert Record" /></td></tr>
+        </tr>
+    </form>
+
+    <tr>
+        <th width="5%">Search a record</th>
+        <td colspan="1">
+
+            <form action = "searchRecords" method = "get" id="searchRecordForm" >
+                <input type="text" id="stockName" name="stockName" value="AA"/>
+                <input  type="submit" value="Search"/>
+            </form>
+        </td>
+    </tr>
+
+    <tr>
+        <th width="10%" colspan="2" style="text-align: center; font: 15pt solid Verdana">
+            <!--<button id ="validateEntity">Validate</button>
+            <button id ="resetvalues">Reset</button>
+            <button id ="clearValues">Clear Results</button>-->
+        </th>
+    </tr>
+
+   <!-- <tr>
+        <th width="10%" colspan="2" style="text-align: center; font: 15pt solid Verdana"  id="downloadZip">
+
+            <h3>Download All Files as a Zip</h3>
+            <a href="http://localhost:24103/downloadZipFile" style="text-decoration: none; padding-top: 5px" class="submit-btn" >Download As Zip</a>
+        </th>
+
+    </tr>-->
+
+    </table>
+
+    <!--<table width="80%" border="1" align="center" id="search-record-table" class="mdl-data-table">
+        <thead align="left">
+        <tr align align="left">
+            <th></th>
+            <th align="left"><b>SNO</b></th>
+            <th align="left"><b>MESSAGE</b></th>
+        </tr>
+        </thead>
+    </table>-->
+</div>
+
+</div>
+</html>

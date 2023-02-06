@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Search Records</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<table width="80%" border="2" align="center">
+
+
+
+    <tr th:if="${stockList.empty}">
+        <td colspan="2"> No records Available </td>
+    </tr>
+</table>
+    <div th:if="${ not#lists.isEmpty(stockList)}">
+        <table width="80%" border="2" align="center">
+            <tr>
+                <th>quarter</th>
+                <th>stock</th>
+                <th>date</th>
+                <th>open</th>
+                <th>high</th>
+                <th>low</th>
+                <th>close</th>
+                <th>volume</th>
+                <th>percent_change_price</th>
+                <th>percent_change_volume_over_last_wk</th>
+                <th>next_weeks_open</th>
+                <th>next_weeks_close</th>
+                <th>percent_change_next_weeks_price</th>
+                <th>days_to_next_dividend</th>
+                <th>days_to_next_dividend</th>
+                <th>percent_return_next_dividend</th>
+            </tr>
+
+            <tr th:each="stock : ${stockList}">
+                <td><span th:text="${stock.quarter}"> </span></td>
+        <td><span th:text="${stock.stock}"> </span></td>
+        <td><span th:text="${stock.date}"> </span></td>
+        <td><span th:text="${stock.open}"> </span></td>
+        <td><span th:text="${stock.high}"> </span></td>
+        <td><span th:text="${stock.low}"> </span></td>
+        <td><span th:text="${stock.close}"> </span></td>
+        <td><span th:text="${stock.volume}"> </span></td>
+        <td><span th:text="${stock.percent_change_price}"> </span></td>
+        <td><span th:text="${stock.percent_change_volume_over_last_wk}"> </span></td>
+        <td><span th:text="${stock.previous_weeks_volume}"> </span></td>
+        <td><span th:text="${stock.next_weeks_open}"> </span></td>
+        <td><span th:text="${stock.next_weeks_close}"> </span></td>
+        <td><span th:text="${stock.percent_change_next_weeks_price}"> </span></td>
+        <td><span th:text="${stock.days_to_next_dividend}"> </span></td>
+        <td><span th:text="${stock.percent_return_next_dividend}"> </span></td>
+    </tr>
+
+            </table>
+    </div>
+
+
+
+
+
+</body>
+</html>
